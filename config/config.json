@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "users_development",
+    "host": "./assets/users_development.sqlite",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "users_production",
+    "host": "./assets/users_production.sqlite",
+    "dialect": "sqlite"
+  }
+}
