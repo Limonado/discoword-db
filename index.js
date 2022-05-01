@@ -1,3 +1,9 @@
+const {Client, Intents} = require("discord.js");
+const client = new Client({intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]});
+
+const config = require("./config.json");
+
+const { GetUser, AddScore, AddXP } = require('./usersDB.js');
 const express = require('express');
 
 const app = module.exports = express()
@@ -6,16 +12,38 @@ app.get('/', function(req, res){
   res.send('Hello World');
 });
 
-app.post('/user', function (req, res) {
-  res.send("discordId is set to "+req.query.discordId);
+app.get('/user', async (req, res) => {
+  try {
+    let user = await client.users.fetch(req.query.discordId);
+    let userItem = await GetUser(user);
+    res.send(userItem);
+  }catch(err) {
+    res.send({ result: "error" });
+  }
+});
+
+app.post('/addscore', async (req, res) => {
+  try {
+    let user = await client.users.fetch(req.user);
+    await AddScore(user, req.score, req.game);
+    res.send({ result: "success" });
+  }catch(err) {
+    res.send({ result: "error" });
+  }
+});
+
+app.post('/addxp', async (req, res) => {
+  try{
+    let user = await client.users.fetch(req.user);
+    await AddXP(user, req.xpMin, req.xpMax, req.game);
+    res.send({ result: "success" });
+  }catch(err) {
+    res.send({ result: "error" });
+  }
 });
 
 app.listen(3000);
 
-const {Client, Intents} = require("discord.js");
-const client = new Client({intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]});
-
-const config = require("./config.json");
 
 client.on('ready', () =>{
   client.user.setActivity(":thew");

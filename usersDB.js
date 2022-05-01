@@ -3,7 +3,7 @@ const { DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: './database/assets/users_development.sqlite',
+  storage: './assets/users_development.sqlite',
 	logging: false
 });
 const User = require('./models/user')(sequelize, DataTypes);
